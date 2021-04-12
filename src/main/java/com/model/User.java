@@ -1,6 +1,6 @@
 package com.model;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Objects;
