@@ -13,12 +13,14 @@ public interface UserService {
 
     public Optional<User> findUser(int id);
 
-    public List<User> findByCriteria(String criteria, String searchItem);
-
     public void addUser (User user);
 
     public Optional<User> deleteUser(int id);
 
     public Optional<User> updateUser(User user);
+
+    User findUserByUsername(String username);
+
+
 
 }

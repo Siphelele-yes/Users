@@ -35,32 +35,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByCriteria(String criteria, String searchItem) {
-
-        switch (criteria){
-            case "username" :
-                return this.userRepository.findByUsername(searchItem);
-            case "firstName" :
-                return this.userRepository.findByFirstName(searchItem);
-            case "lastName" :
-                return this.userRepository.findByLastName(searchItem);
-            case "age" :
-                try {
-                    Integer age = Integer.valueOf(searchItem);
-                    return this.userRepository.findByAge(age);
-                }
-                catch (NumberFormatException e){
-                    System.out.println("Could not convert age to number");
-                }
-                return new ArrayList<>();
-            case "country" :
-                return this.userRepository.findByCountry(searchItem);
-
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -107,5 +81,11 @@ public class UserServiceImpl implements UserService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return  userRepository.findUserByUsername(username);
+    }
+
 
 }

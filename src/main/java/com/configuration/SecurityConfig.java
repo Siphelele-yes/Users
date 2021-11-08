@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers("/h2/**").permitAll()
-                .antMatchers("/api/users/**").hasRole("ADMIN").and().httpBasic()
+                //.antMatchers("/api/users/**").hasRole("ADMIN").and().httpBasic()
                 .and().csrf().disable();
 
         httpSecurity.headers().frameOptions().disable();
