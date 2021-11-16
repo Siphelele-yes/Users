@@ -1,10 +1,16 @@
 package com.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {

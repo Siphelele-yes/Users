@@ -6,12 +6,12 @@ import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,11 +22,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
+
 
     @Override
     public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return userRepository.findAll(pageable) ;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 existingUser.setUsername(user.getUsername());
             }
             if (user.getPassword()!= null){
-                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                existingUser.setPassword(user.getPassword());
             }
             if (user.getFirstName()!= null){
                 existingUser.setFirstName(user.getFirstName());
@@ -79,12 +80,13 @@ public class UserServiceImpl implements UserService {
             userRepository.save(existingUser);
             return Optional.of(existingUser);
         }
+
         return Optional.empty();
     }
 
     @Override
     public User findUserByUsername(String username) {
-        return  userRepository.findUserByUsername(username);
+      return userRepository.findUserByUsername(username);
     }
 
 

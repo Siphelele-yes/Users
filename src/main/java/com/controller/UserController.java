@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.configuration.PasswordConfig;
+import com.config.PasswordConfig;
 import com.model.User;
 import com.repository.UserRepository;
 import com.service.UserService;
@@ -9,13 +9,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -30,7 +34,7 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @GetMapping("/users")
+  /*  @GetMapping("/users")
     public ResponseEntity<?> findAll(Pageable pageable){
         return new ResponseEntity<Page<User>>(userService.findAll(pageable), HttpStatus.OK);
     }
@@ -68,6 +72,9 @@ public class UserController {
         return new ResponseEntity <User> (HttpStatus.NOT_FOUND);
     }
 
+*/
+
+
     @PostMapping("/login-user")
     @ResponseBody
     public ResponseEntity<?> loginUser(@Validated @RequestBody User user){
@@ -84,5 +91,17 @@ public class UserController {
             return new ResponseEntity<>("\"Password didn't match, please enter the correct password, logged-in\"",HttpStatus.OK);
         }
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> findAll(Pageable pageable){
+        return new ResponseEntity<Page<User>>(userService.findAll(pageable), HttpStatus.OK);
+    }
+
+    @PostMapping("/register-user")
+    public ResponseEntity<?> add (@Validated @RequestBody User user){
+        userService.addUser(user);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
+
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -20,6 +21,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByCountry(String country);
 
-    User findUserByUsername(String username);
-
+    public User findUserByUsername(String username);
+    User findByUsernameAndPassword(String username,String password);
 }
