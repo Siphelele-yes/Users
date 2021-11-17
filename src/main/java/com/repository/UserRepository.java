@@ -13,14 +13,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    public List<User> findByFirstName(String firstName);
+    public List<User> findByName(String name);
 
-    public List<User> findByLastName(String lastName);
-
-    public List<User> findByAge(Integer age);
-
-    public List<User> findByCountry(String country);
+    public List<User> findBySurname(String surname);
 
     public User findUserByUsername(String username);
+
     User findByUsernameAndPassword(String username,String password);
 }

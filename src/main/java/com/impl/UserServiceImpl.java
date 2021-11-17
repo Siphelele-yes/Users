@@ -36,9 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User addUser(User user) {
         userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.findUserByUsername(user.getUsername());
     }
 
     @Override
@@ -65,17 +66,11 @@ public class UserServiceImpl implements UserService {
             if (user.getPassword()!= null){
                 existingUser.setPassword(user.getPassword());
             }
-            if (user.getFirstName()!= null){
-                existingUser.setFirstName(user.getFirstName());
+            if (user.getName()!= null){
+                existingUser.setName(user.getName());
             }
-            if (user.getLastName()!= null){
-                existingUser.setLastName(user.getLastName());
-            }
-            if (user.getAge() != null) {
-                existingUser.setAge(user.getAge());
-            }
-            if (user.getCountry()!=null){
-                existingUser.setCountry(user.getCountry());
+            if (user.getSurname()!= null){
+                existingUser.setSurname(user.getSurname());
             }
             userRepository.save(existingUser);
             return Optional.of(existingUser);

@@ -4,16 +4,19 @@ import com.config.PasswordConfig;
 import com.model.User;
 import com.repository.UserRepository;
 import com.service.UserService;
+import org.assertj.core.presentation.Representation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,7 +78,7 @@ public class UserController {
 */
 
 
-    @PostMapping("/login-user")
+    /*@PostMapping("/login-user")
     @ResponseBody
     public ResponseEntity<?> loginUser(@Validated @RequestBody User user){
 
@@ -90,6 +93,21 @@ public class UserController {
         }else {
             return new ResponseEntity<>("\"Password didn't match, please enter the correct password, logged-in\"",HttpStatus.OK);
         }
+    }*/
+
+    @RequestMapping(value = "/login-user", method = RequestMethod.POST
+            , produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE}
+            , consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.APPLICATION_JSON_VALUE})
+
+    public ResponseEntity<?> loginUser(@Validated  User user)  {
+        User usernameExist = userService.findUserByUsername(user.getUsername());
+        if(!usernameExist.getPassword().isEmpty()){
+            if(usernameExist.getPassword() == user.getPassword()){
+                return new ResponseEntity<User>(usernameExist,HttpStatus.OK);
+            }
+        }
+        //return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        return null;
     }
 
     @GetMapping("/users")
@@ -97,11 +115,13 @@ public class UserController {
         return new ResponseEntity<Page<User>>(userService.findAll(pageable), HttpStatus.OK);
     }
 
-    @PostMapping("/register-user")
-    public ResponseEntity<?> add (@Validated @RequestBody User user){
-        userService.addUser(user);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
-    }
+    @RequestMapping(value = "/register-user",method = RequestMethod.POST
+            , produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE}
+            , consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.APPLICATION_JSON_VALUE})
 
+    public ResponseEntity<?> add (@Validated  User user){
+        User newUser = userService.addUser(user);
+        return new ResponseEntity<User>(newUser,HttpStatus.CREATED);
+    }
 
 }

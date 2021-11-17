@@ -12,7 +12,7 @@ public interface UserService {
 
     public Optional<User> findUser(int id);
 
-    public void addUser (User user);
+    public User addUser (User user);
 
     public Optional<User> deleteUser(int id);
 

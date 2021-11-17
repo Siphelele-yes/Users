@@ -3,7 +3,6 @@ package com.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -23,30 +22,22 @@ public class User {
     @NotNull
     private String password;
     @NotNull
-    private String firstName;
+    private String name;
     @NotNull
-    private String lastName;
-    @NotNull
-    private Integer age;
-    @NotNull
-    private String country;
+    private String surname;
 
-    public User(String username, String password, String firstName, String lastName, Integer age, String country) {
+    public User(String username, String password, String name, String surname) {
         super();
         this.username = username;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.country = country;
+        this.name = name;
+        this.surname = surname;
     }
+
+    public User(){}
 
     public int getId() {
         return id;
-    }
-
-    public User() {
-        super();
     }
 
     public String getUsername() {
@@ -65,36 +56,20 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Override
@@ -102,12 +77,13 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age) && Objects.equals(country, user.country);
+        return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(name, user.name
+        ) && Objects.equals(surname, user.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, firstName, lastName, age, country);
+        return Objects.hash(id, username, password, name, surname);
     }
 
     @Override
@@ -116,10 +92,8 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", country='" + country + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
                 '}';
     }
 }
