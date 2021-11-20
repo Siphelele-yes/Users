@@ -37,11 +37,7 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  /*  @GetMapping("/users")
-    public ResponseEntity<?> findAll(Pageable pageable){
-        return new ResponseEntity<Page<User>>(userService.findAll(pageable), HttpStatus.OK);
-    }
-
+  /*
     @GetMapping("/id")
     public ResponseEntity<?> findById(@RequestParam (name = "id",required = true ) int id){
         Optional <User> optionalUser = userService.findUser(id);
@@ -77,43 +73,43 @@ public class UserController {
 
 */
 
-
-    /*@PostMapping("/login-user")
-    @ResponseBody
-    public ResponseEntity<?> loginUser(@Validated @RequestBody User user){
-
-        User usernameExist = userService.findUserByUsername(user.getUsername());
-        String existingPassword =usernameExist.getPassword();
-        String currentPassword=user.getPassword();
-
-        if (usernameExist.getUsername().isEmpty()) {
-            return new ResponseEntity<>("\"Oops.! User email not found, please register.\"",HttpStatus.OK);
-        }else if (passwordConfig.passwordDecoder(currentPassword,existingPassword)) {
-            return new ResponseEntity<>("\"Password Exists, logged-in\"",HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>("\"Password didn't match, please enter the correct password, logged-in\"",HttpStatus.OK);
-        }
-    }*/
-
     @RequestMapping(value = "/login-user", method = RequestMethod.POST
             , produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE}
             , consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.APPLICATION_JSON_VALUE})
 
     public ResponseEntity<?> loginUser(@Validated  User user)  {
+        HttpStatus status ;
         User usernameExist = userService.findUserByUsername(user.getUsername());
-        if(!usernameExist.getPassword().isEmpty()){
-            if(usernameExist.getPassword() == user.getPassword()){
-                return new ResponseEntity<User>(usernameExist,HttpStatus.OK);
-            }
-        }
-        //return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
-        return null;
+        if(!usernameExist.getPassword().isEmpty() && usernameExist.getPassword().equals(user.getPassword())){
+            status = HttpStatus.OK;
+        }else
+            status = HttpStatus.FORBIDDEN;
+
+        return new ResponseEntity<>(usernameExist,status);
     }
+
+    @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST
+            , produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE}
+            , consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.APPLICATION_JSON_VALUE})
+
+    public ResponseEntity<?> forgotPassword(@Validated  User user)  {
+        HttpStatus status;
+        User usernameExist = userService.findUserByUsername(user.getUsername());
+        if(!usernameExist.getUsername().isEmpty()){
+            status = HttpStatus.OK;
+        }else
+            status = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(status);
+    }
+
+
 
     @GetMapping("/users")
     public ResponseEntity<?> findAll(Pageable pageable){
         return new ResponseEntity<Page<User>>(userService.findAll(pageable), HttpStatus.OK);
     }
+
 
     @RequestMapping(value = "/register-user",method = RequestMethod.POST
             , produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE}

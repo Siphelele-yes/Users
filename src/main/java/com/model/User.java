@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -17,21 +18,33 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+    @NotNull @Column
     private String username;
-    @NotNull
+    @NotNull @Column
     private String password;
-    @NotNull
+    @NotNull @Column
     private String name;
-    @NotNull
+    @NotNull @Column
     private String surname;
 
-    public User(String username, String password, String name, String surname) {
+    @Column(name = "created_on")
+    private Date createdOn;
+
+    @Column(name = "last_login")
+    private Date lastLogin;
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    public User(String username, String password, String name, String surname, Date createdOn, Date lastLogin, String resetToken ) {
         super();
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.createdOn = createdOn;
+        this.lastLogin = lastLogin;
+        this.resetToken = resetToken;
     }
 
     public User(){}
@@ -72,18 +85,42 @@ public class User {
         this.surname = surname;
     }
 
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(name, user.name
-        ) && Objects.equals(surname, user.surname);
+        ) && Objects.equals(surname, user.surname) && Objects.equals(createdOn,user.createdOn) && Objects.equals(lastLogin, user.lastLogin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, name, surname);
+        return Objects.hash(id, username, password, name, surname, createdOn, lastLogin);
     }
 
     @Override
@@ -94,6 +131,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", lastLogin='" + lastLogin + '\'' +
                 '}';
     }
 }
